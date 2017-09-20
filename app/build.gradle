@@ -24,9 +24,11 @@ android {
 }
 
 ext {
-	supportLibVersion = "26.1.0"
-	jsr305Version = "3.0.1"
-	daggerVersion = "2.11"
+	support_version = "26.1.0"
+	jsr305_version = "3.0.1"
+	dagger_version = "2.11"
+	anko_version = "0.10.1"
+	retrofitLibVersion = "2.3.0"
 }
 
 dependencies {
@@ -35,17 +37,29 @@ dependencies {
 	testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 
 	implementation fileTree(dir: 'libs', include: ['*.jar'])
-	implementation "com.android.support:appcompat-v7:$supportLibVersion"
+	implementation "com.android.support:appcompat-v7:$support_version"
 	implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
-	//	Dagger core dependencies
-	kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-	//	Dagger Android dependencies
-	kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-	implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+	// Anko Commons
+	implementation "org.jetbrains.anko:anko-commons:$anko_version"
 
-	implementation "com.google.code.findbugs:jsr305:$jsr305Version"
+	// Anko Layouts
+	implementation "org.jetbrains.anko:anko-sdk15:$anko_version"
+	implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+
+	// Network dependencies
+	implementation "com.squareup.retrofit2:retrofit:$retrofitLibVersion"
+	implementation "com.squareup.retrofit2:converter-moshi:$retrofitLibVersion"
+	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitLibVersion"
+
+	//	Dagger core dependencies
+	kapt "com.google.dagger:dagger-compiler:$dagger_version"
+	//	Dagger Android dependencies
+	kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+	implementation "com.google.dagger:dagger-android-support:$dagger_version"
+
+	implementation "com.google.code.findbugs:jsr305:$jsr305_version"
 
 
 	testImplementation 'junit:junit:4.12'
