@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+	compileSdkVersion 26
+	buildToolsVersion "26.0.1"
+	defaultConfig {
+		applicationId "me.rakshakhegde.pizza"
+		minSdkVersion 15
+		targetSdkVersion 26
+		versionCode 1
+		versionName "1.0"
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+	}
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
+}
+
+ext {
+	supportLibVersion = "26.1.0"
+	jsr305Version = "3.0.1"
+	daggerVersion = "2.11"
+}
+
+dependencies {
+	debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+	releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+	testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation "com.android.support:appcompat-v7:$supportLibVersion"
+	implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+	//	Dagger core dependencies
+	kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+	//	Dagger Android dependencies
+	kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+	implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+
+	implementation "com.google.code.findbugs:jsr305:$jsr305Version"
+
+
+	testImplementation 'junit:junit:4.12'
+
+
+	androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
+		exclude group: 'com.android.support', module: 'support-annotations'
+	})
+}
