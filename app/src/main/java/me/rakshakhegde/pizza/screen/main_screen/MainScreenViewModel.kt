@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * Created by rakshak on 20/09/17.
  */
-class MainScreenPresenter @Inject constructor(pizzaApi: PizzaApi) {
+class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 
 	init {
 		pizzaApi.getPizzaVariants()
