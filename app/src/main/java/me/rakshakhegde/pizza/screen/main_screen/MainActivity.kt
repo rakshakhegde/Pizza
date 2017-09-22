@@ -20,5 +20,9 @@ class MainActivity : AppCompatActivity() {
 
 		val binding: ActivityMainBinding = DataBindingUtil.setContentView(act, R.layout.activity_main)
 		binding.v = this@MainActivity
+
+		binding.retryButton.setOnClickListener {
+			VM.retryClick!!.onNext(0)
+		}
 	}
 }
