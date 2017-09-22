@@ -10,7 +10,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
 	@Inject
-	lateinit var presenter: MainScreenViewModel
+	lateinit var VM: MainScreenViewModel
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		AndroidInjection.inject(act)

@@ -1,8 +1,8 @@
 package me.rakshakhegde.pizza.screen.main_screen
 
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import me.rakshakhegde.pizza.dao.PizzaApi
+import me.rakshakhegde.rxdatabinding.toField
 import javax.inject.Inject
 
 /**
@@ -10,12 +10,8 @@ import javax.inject.Inject
  */
 class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 
-	init {
-		pizzaApi.getPizzaVariants()
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe { pizzaVariants ->
-					println("Pizza Varaiants: **** " + pizzaVariants.raw().body())
-				}
-	}
+	val pizzaVariants = pizzaApi.getPizzaVariants()
+			.subscribeOn(Schedulers.io())
+			.toObservable()
+			.toField()
 }

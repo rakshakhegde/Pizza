@@ -3,8 +3,6 @@ package me.rakshakhegde.pizza.dao
 /**
  * Created by rakshak on 20/09/17.
  */
-
-
 data class PizzaVariants(
 		val variants: Variants
 )

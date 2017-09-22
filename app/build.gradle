@@ -21,6 +21,8 @@ android {
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
+
+	dataBinding.enabled true
 }
 
 ext {
@@ -54,6 +56,8 @@ dependencies {
 	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitLibVersion"
 	implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
+	implementation 'com.github.rakshakhegde.ObservableFlow:rxdatabinding:0.1-alpha'
+
 	//	Dagger core dependencies
 	kapt "com.google.dagger:dagger-compiler:$dagger_version"
 	//	Dagger Android dependencies
@@ -61,6 +65,8 @@ dependencies {
 	implementation "com.google.dagger:dagger-android-support:$dagger_version"
 
 	implementation "com.google.code.findbugs:jsr305:$jsr305_version"
+
+	kapt "com.android.databinding:compiler:$databinding_version"
 
 
 	testImplementation 'junit:junit:4.12'
