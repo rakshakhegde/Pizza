@@ -25,5 +25,6 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 			}
 			.doOnError { pizzaVariantsError.set(true) }
 			.doFinally { pizzaVariantsLoading.set(false) }
+			.toObservable()
 			.toField()
 }
