@@ -13,6 +13,7 @@ android {
 		targetSdkVersion 26
 		versionCode 1
 		versionName "1.0"
+		multiDexEnabled true
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 	buildTypes {
@@ -69,6 +70,8 @@ dependencies {
 	implementation "com.google.dagger:dagger-android-support:$dagger_version"
 
 	implementation "com.google.code.findbugs:jsr305:$jsr305_version"
+
+	implementation 'com.android.support:multidex:1.0.2'
 
 	kapt "com.android.databinding:compiler:$databinding_version"
 

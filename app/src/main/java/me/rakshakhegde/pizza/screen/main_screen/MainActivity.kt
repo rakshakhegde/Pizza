@@ -9,6 +9,7 @@ import me.rakshakhegde.pizza.R
 import me.rakshakhegde.pizza.databinding.ActivityMainBinding
 import me.rakshakhegde.pizza.network_dao.VariantGroup
 import me.rakshakhegde.pizza.network_dao.Variation
+import me.tatarka.bindingcollectionadapter2.BindingListViewAdapter
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 import org.jetbrains.anko.act
 import javax.inject.Inject
@@ -19,6 +20,9 @@ class MainActivity : AppCompatActivity() {
 			.bindExtra(BR.V, this@MainActivity)
 
 	val spinnerVariantItemBinding = ItemBinding.of<Variation>(BR.variation, R.layout.variation_spinner_dropdown_item)
+	val spinnerItemIds = BindingListViewAdapter.ItemIds<Variation> { position, item ->
+		item.name.hashCode().toLong()
+	}
 
 	@Inject
 	lateinit var VM: MainScreenViewModel
