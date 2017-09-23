@@ -1,7 +1,6 @@
 package me.rakshakhegde.pizza.network_dao
 
 import io.reactivex.Single
-import retrofit2.Response
 import retrofit2.http.GET
 
 /**
@@ -10,5 +9,5 @@ import retrofit2.http.GET
 interface PizzaApi {
 
 	@GET("bins/wfqe9")
-	fun getPizzaVariants(): Single<Response<PizzaVariants>>
+	fun getPizzaVariants(): Single<PizzaVariants>
 }

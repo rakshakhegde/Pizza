@@ -13,7 +13,6 @@ import me.rakshakhegde.pizza.network_dao.PizzaVariants
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Response
 
 /**
  * Created by Rakshak.R.Hegde on 23-Sep-17.
@@ -31,7 +30,7 @@ class MainScreenViewModelTest {
 
 	@Test
 	fun getPizzaVariants() {
-		var emitter: SingleEmitter<Response<PizzaVariants>>? = null
+		var emitter: SingleEmitter<PizzaVariants>? = null
 		val pizzaApi: PizzaApi = mock {
 			on { getPizzaVariants() } doReturn Single.create { emitter = it }
 		}
@@ -41,7 +40,7 @@ class MainScreenViewModelTest {
 
 		VM.pizzaVariantsLoading.get() shouldBe true
 
-		emitter!!.onSuccess(Response.success(mock()))
+		emitter!!.onSuccess(mock())
 
 		VM.pizzaVariantsLoading.get() shouldBe false
 	}

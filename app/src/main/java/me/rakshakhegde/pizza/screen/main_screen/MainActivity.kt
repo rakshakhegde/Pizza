@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
 			.bindExtra(BR.V, this@MainActivity)
 
 	val spinnerVariantItemBinding = ItemBinding.of<Variation>(BR.variation, R.layout.variation_spinner_dropdown_item)
-	val spinnerItemIds = BindingListViewAdapter.ItemIds<Variation> { position, item ->
-		item.name.hashCode().toLong()
+	val spinnerItemIds = BindingListViewAdapter.ItemIds<Variation> { position, variation ->
+		variation.name.hashCode().toLong()
 	}
 
 	@Inject
