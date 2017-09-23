@@ -14,11 +14,19 @@ import me.rakshakhegde.pizza.network_dao.PizzaVariants
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
 /**
  * Created by Rakshak.R.Hegde on 23-Sep-17.
  */
 class MainScreenViewModelTest {
+
+	val testJson = """
+		{"variants":{"variant_groups":[{"group_id":"1","name":"Crust","variations":[{"name":"Thin","price":0,"default":1,"id":"1","inStock":1},{"name":"Thick","price":0,"default":0,"id":"2","inStock":1,"isVeg":1},{"name":"Cheese burst","price":100,"default":0,"id":"3","inStock":1,"isVeg":1}]},{"group_id":"2","name":"Size","variations":[{"name":"Small","price":0,"default":1,"id":"10","inStock":1,"isVeg":0},{"name":"Medium","price":100,"default":0,"id":"11","inStock":1,"isVeg":1},{"name":"Large","price":200,"default":0,"id":"12","inStock":1,"isVeg":0}]},{"group_id":"3","name":"Sauce","variations":[{"name":"Manchurian","price":20,"default":0,"id":"20","inStock":1,"isVeg":0},{"name":"Tomato","price":20,"default":0,"id":"21","inStock":1,"isVeg":1},{"name":"Mustard","price":20,"default":0,"id":"22","inStock":1,"isVeg":0}]}],"exclude_list":[[{"group_id":"1","variation_id":"3"},{"group_id":"2","variation_id":"10"}],[{"group_id":"2","variation_id":"10"},{"group_id":"3","variation_id":"22"}]]}}
+		"""
+
+	val pizzaVariants = Moshi.Builder().build().adapter(PizzaVariants::class.java).fromJson(testJson)
+
 	@Before
 	fun setUp() {
 		RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
@@ -30,29 +38,39 @@ class MainScreenViewModelTest {
 	}
 
 	@Test
-	fun getPizzaVariants() {
+	fun verify_VM_states_pizza_variants() {
 		var emitter: SingleEmitter<PizzaVariants>? = null
 		val pizzaApi: PizzaApi = mock {
 			on { getPizzaVariants() } doReturn Single.create { emitter = it }
 		}
 		val VM = MainScreenViewModel(pizzaApi)
 
-		VM.selectedPositions.size shouldBe 0
-
 		VM.pizzaVariants.onPropertyChanged {}
 
+		VM.selectedPositions.size shouldBe 0
+		VM.pizzaVariants.get() shouldBe null
 		VM.pizzaVariantsLoading.get() shouldBe true
-
-		val pizzaVariants = Moshi.Builder().build().adapter(PizzaVariants::class.java).fromJson(testJson)
 
 		emitter!!.onSuccess(pizzaVariants)
 
+		VM.pizzaVariants.get() shouldBe pizzaVariants
 		VM.selectedPositions.size shouldBe 3
 		VM.pizzaVariantsLoading.get() shouldBe false
 	}
 
-	val testJson = """
-		{"variants":{"variant_groups":[{"group_id":"1","name":"Crust","variations":[{"name":"Thin","price":0,"default":1,"id":"1","inStock":1},{"name":"Thick","price":0,"default":0,"id":"2","inStock":1,"isVeg":1},{"name":"Cheese burst","price":100,"default":0,"id":"3","inStock":1,"isVeg":1}]},{"group_id":"2","name":"Size","variations":[{"name":"Small","price":0,"default":1,"id":"10","inStock":1,"isVeg":0},{"name":"Medium","price":100,"default":0,"id":"11","inStock":1,"isVeg":1},{"name":"Large","price":200,"default":0,"id":"12","inStock":1,"isVeg":0}]},{"group_id":"3","name":"Sauce","variations":[{"name":"Manchurian","price":20,"default":0,"id":"20","inStock":1,"isVeg":0},{"name":"Tomato","price":20,"default":0,"id":"21","inStock":1,"isVeg":1},{"name":"Mustard","price":20,"default":0,"id":"22","inStock":1,"isVeg":0}]}],"exclude_list":[[{"group_id":"1","variation_id":"3"},{"group_id":"2","variation_id":"10"}],[{"group_id":"2","variation_id":"10"},{"group_id":"3","variation_id":"22"}]]}}
-		"""
+	@Test
+	fun filterVariants() {
+		val pizzaApi: PizzaApi = mock {
+			on { getPizzaVariants() } doReturn Single.just(pizzaVariants)
+		}
+		val VM = MainScreenViewModel(pizzaApi)
+
+		VM.pizzaVariants.onPropertyChanged {}
+
+		val filteredVariations = VM.filterVariations(2, listOf(2, 0, Random().nextInt()))
+
+		val allVariations = pizzaVariants.variants.variant_groups[2].variations
+		filteredVariations shouldBe listOf(allVariations[0], allVariations[1])
+	}
 
 }

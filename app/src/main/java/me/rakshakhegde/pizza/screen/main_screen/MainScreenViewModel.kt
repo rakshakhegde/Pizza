@@ -6,6 +6,7 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.schedulers.Schedulers
 import me.rakshakhegde.pizza.network_dao.PizzaApi
 import me.rakshakhegde.pizza.network_dao.VariantGroup
+import me.rakshakhegde.pizza.network_dao.Variation
 import me.rakshakhegde.rxdatabinding.toField
 import javax.inject.Inject
 
@@ -47,4 +48,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 			else "₹ " + variantGroups.zip(selectedPositions).sumBy { (group, position) ->
 				group.variations[position].price
 			}
+
+	fun filterVariations(position: Int, selectedPositions: List<Int>): List<Variation> =
+			pizzaVariants.get().variants.variant_groups[position].variations
 }

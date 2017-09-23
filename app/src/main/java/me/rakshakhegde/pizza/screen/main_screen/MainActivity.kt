@@ -52,9 +52,9 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
-	override fun onStop() {
+	override fun onDestroy() {
 		binding.unbind()
-		super.onStop()
+		super.onDestroy()
 	}
 
 	fun bounceAddItemBar(vararg objs: Any?): Int {

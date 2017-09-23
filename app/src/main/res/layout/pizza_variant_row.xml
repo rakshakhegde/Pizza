@@ -41,7 +41,7 @@
 			itemBinding="@{V.spinnerVariantItemBinding}"
 			itemDropDownLayout="@{@layout/variation_spinner_dropdown_item}"
 			itemIds="@{V.spinnerItemIds}"
-			items="@{variantGroup.variations}"
+			items="@{V.VM.filterVariations(position, V.VM.selectedPositions)}"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:selectedItemPosition="@={V.VM.selectedPositions[position]}"
