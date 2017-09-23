@@ -1,4 +1,4 @@
-package me.rakshakhegde.pizza.dao
+package me.rakshakhegde.pizza.network_dao
 
 /**
  * Created by rakshak on 20/09/17.

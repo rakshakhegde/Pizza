@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="dummy_crust">
+		<item>Thin</item>
+		<item>Thick</item>
+	</string-array>
+</resources>

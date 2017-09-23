@@ -1,4 +1,5 @@
 <resources>
 	<string name="app_name">Pizza</string>
 	<string name="retry">Retry</string>
+	<string name="price_format">₹ %d</string>
 </resources>

@@ -1,4 +1,4 @@
-package me.rakshakhegde.pizza.dao
+package me.rakshakhegde.pizza.network_dao
 
 import io.reactivex.Single
 import retrofit2.Response

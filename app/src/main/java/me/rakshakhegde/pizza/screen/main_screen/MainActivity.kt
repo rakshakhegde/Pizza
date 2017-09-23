@@ -4,12 +4,21 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import dagger.android.AndroidInjection
+import me.rakshakhegde.pizza.BR
 import me.rakshakhegde.pizza.R
 import me.rakshakhegde.pizza.databinding.ActivityMainBinding
+import me.rakshakhegde.pizza.network_dao.VariantGroup
+import me.rakshakhegde.pizza.network_dao.Variation
+import me.tatarka.bindingcollectionadapter2.ItemBinding
 import org.jetbrains.anko.act
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+	val pizzaListItemBinding = ItemBinding.of<VariantGroup>(BR.variantGroup, R.layout.pizza_variant_row)
+			.bindExtra(BR.V, this@MainActivity)
+
+	val spinnerVariantItemBinding = ItemBinding.of<Variation>(BR.variation, R.layout.variation_spinner_dropdown_item)
 
 	@Inject
 	lateinit var VM: MainScreenViewModel

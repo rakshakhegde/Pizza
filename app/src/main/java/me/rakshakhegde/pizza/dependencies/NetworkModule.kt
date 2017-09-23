@@ -3,7 +3,7 @@ package me.rakshakhegde.pizza.dependencies
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import me.rakshakhegde.pizza.dao.PizzaApi
+import me.rakshakhegde.pizza.network_dao.PizzaApi
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory

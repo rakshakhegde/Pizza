@@ -8,8 +8,8 @@ import io.reactivex.SingleEmitter
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import me.rakshakhegde.observableflow.onPropertyChanged
-import me.rakshakhegde.pizza.dao.PizzaApi
-import me.rakshakhegde.pizza.dao.PizzaVariants
+import me.rakshakhegde.pizza.network_dao.PizzaApi
+import me.rakshakhegde.pizza.network_dao.PizzaVariants
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

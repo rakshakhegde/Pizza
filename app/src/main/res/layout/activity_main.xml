@@ -6,58 +6,49 @@
 
 	<data>
 
+		<import type="me.tatarka.bindingcollectionadapter2.LayoutManagers"/>
+
 		<variable
 			name="V"
-			type="me.rakshakhegde.pizza.screen.main_screen.MainActivity" />
+			type="me.rakshakhegde.pizza.screen.main_screen.MainActivity"/>
 	</data>
 
 	<android.support.constraint.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-		<Spinner
-			android:id="@+id/spinner"
+		<android.support.v7.widget.RecyclerView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginEnd="8dp"
-			android:layout_marginStart="8dp"
-			android:layout_marginTop="8dp"
+			app:itemBinding="@{V.pizzaListItemBinding}"
+			app:items="@{V.VM.pizzaVariants.variants.variant_groups}"
+			app:layoutManager="@{LayoutManagers.linear()}"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"/>
+			app:layout_constraintTop_toTopOf="parent"
+			tools:listitem="@layout/pizza_variant_row"/>
 
 		<ProgressBar
 			android:id="@+id/progressBar"
 			style="?android:attr/progressBarStyle"
+			visible="@{V.VM.pizzaVariantsLoading}"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:visible="@{V.VM.pizzaVariantsLoading}"/>
+			app:layout_constraintTop_toTopOf="parent"/>
 
 		<Button
 			android:id="@+id/retryButton"
+			visible="@{V.VM.pizzaVariantsError}"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/retry"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:visible="@{V.VM.pizzaVariantsError}"/>
-
-		<TextView
-			android:id="@+id/textView"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="8dp"
-			android:layout_marginTop="16dp"
-			android:text="@{`` + V.VM.pizzaVariants + V.VM.pizzaVariantsLoading + V.VM.pizzaVariantsError}"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@+id/spinner"
-			tools:text="TextView"/>
+			app:layout_constraintTop_toTopOf="parent"/>
 
 	</android.support.constraint.ConstraintLayout>
 </layout>

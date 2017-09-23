@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="variantGroup"
+			type="me.rakshakhegde.pizza.network_dao.VariantGroup"/>
+
+		<variable
+			name="V"
+			type="me.rakshakhegde.pizza.screen.main_screen.MainActivity"/>
+	</data>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{variantGroup.name}"
+			android:textAllCaps="true"
+			android:textStyle="bold"
+			tools:text="Crust"/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@android:color/darker_gray"/>
+
+		<Spinner
+			android:id="@+id/spinner"
+			itemBinding="@{V.spinnerVariantItemBinding}"
+			itemDropDownLayout="@{@layout/variation_spinner_dropdown_item}"
+			items="@{variantGroup.variations}"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			tools:entries="@array/dummy_crust"/>
+
+	</LinearLayout>
+</layout>
