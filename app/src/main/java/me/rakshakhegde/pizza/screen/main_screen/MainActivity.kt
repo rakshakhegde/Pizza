@@ -3,6 +3,7 @@ package me.rakshakhegde.pizza.screen.main_screen
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.animation.AnimationUtils
 import dagger.android.AndroidInjection
 import me.rakshakhegde.pizza.BR
 import me.rakshakhegde.pizza.R
@@ -29,6 +30,14 @@ class MainActivity : AppCompatActivity() {
 		variation.hashCodeId
 	}
 
+	val binding by lazy {
+		DataBindingUtil.setContentView<ActivityMainBinding>(act, R.layout.activity_main)
+	}
+
+	val bounceAnim by lazy {
+		AnimationUtils.loadAnimation(applicationContext, R.anim.notify_bounce)
+	}
+
 	@Inject
 	lateinit var VM: MainScreenViewModel
 
@@ -36,11 +45,15 @@ class MainActivity : AppCompatActivity() {
 		AndroidInjection.inject(act)
 		super.onCreate(savedInstanceState)
 
-		val binding: ActivityMainBinding = DataBindingUtil.setContentView(act, R.layout.activity_main)
 		binding.v = this@MainActivity
 
 		binding.retryButton.setOnClickListener {
 			VM.retryClick!!.onNext(0)
 		}
+	}
+
+	fun bounceAddItemBar(vararg objs: Any?): Int {
+		binding.addItemBar.startAnimation(bounceAnim)
+		return 0
 	}
 }
