@@ -52,6 +52,11 @@ class MainActivity : AppCompatActivity() {
 		}
 	}
 
+	override fun onStop() {
+		binding.unbind()
+		super.onStop()
+	}
+
 	fun bounceAddItemBar(vararg objs: Any?): Int {
 		binding.addItemBar.startAnimation(bounceAnim)
 		return 0

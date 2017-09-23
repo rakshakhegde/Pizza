@@ -18,11 +18,13 @@
 		android:layout_height="match_parent">
 
 		<android.support.v7.widget.RecyclerView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_marginBottom="16dp"
 			app:itemBinding="@{V.pizzaListItemBinding}"
 			app:items="@{V.VM.pizzaVariants.variants.variant_groups}"
 			app:layoutManager="@{LayoutManagers.linear()}"
+			app:layout_constraintBottom_toTopOf="@+id/textView"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +61,7 @@
 			android:layout_margin="16dp"
 			android:background="@color/dirty_green"
 			android:clickable="true"
-			android:elevation="4dp"
+			android:elevation="2dp"
 			android:foreground="?selectableItemBackground"
 			android:padding="16dp"
 			android:theme="@style/Base.TextAppearance.AppCompat.Subhead.Inverse"
