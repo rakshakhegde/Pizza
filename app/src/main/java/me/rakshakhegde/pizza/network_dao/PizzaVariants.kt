@@ -30,3 +30,6 @@ data class Variation(
 		val id: String, //1
 		val inStock: Int //1
 )
+
+val Variation.hashCodeId: Long
+	get() = name.hashCode().toLong()

@@ -11,6 +11,10 @@
 		<variable
 			name="V"
 			type="me.rakshakhegde.pizza.screen.main_screen.MainActivity"/>
+
+		<variable
+			name="position"
+			type="int"/>
 	</data>
 
 	<LinearLayout
@@ -40,6 +44,7 @@
 			items="@{variantGroup.variations}"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:selectedItemPosition="@={V.VM.selectedPositions[position]}"
 			tools:entries="@array/dummy_crust"/>
 
 	</LinearLayout>

@@ -50,5 +50,49 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"/>
 
+		<FrameLayout
+			android:id="@+id/addItemBar"
+			visible="@{V.VM.pizzaVariants.get() != null}"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_margin="16dp"
+			android:background="@color/dirty_green"
+			android:clickable="true"
+			android:foreground="?selectableItemBackground"
+			android:padding="16dp"
+			android:theme="@style/Base.TextAppearance.AppCompat.Subhead.Inverse"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent">
+
+			<TextView
+				android:id="@+id/button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="start"
+				android:text="@{V.VM.chosenVariantsTotalPrice(V.VM.pizzaVariants.variants.variant_groups, V.VM.selectedPositions)}"
+				android:textStyle="bold"
+				tools:text="₹ 450"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="end"
+				android:text="@string/add_item"
+				android:textAllCaps="true"
+				android:textStyle="bold"/>
+		</FrameLayout>
+
+		<TextView
+			android:id="@+id/textView"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="16dp"
+			android:layout_marginLeft="16dp"
+			android:text="@{V.VM.variantsChosen(V.VM.pizzaVariants.variants.variant_groups, V.VM.selectedPositions)}"
+			app:layout_constraintBottom_toTopOf="@+id/addItemBar"
+			app:layout_constraintStart_toStartOf="parent"
+			tools:text="Thin, Medium, Tomato"/>
+
 	</android.support.constraint.ConstraintLayout>
 </layout>

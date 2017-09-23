@@ -9,19 +9,24 @@ import me.rakshakhegde.pizza.R
 import me.rakshakhegde.pizza.databinding.ActivityMainBinding
 import me.rakshakhegde.pizza.network_dao.VariantGroup
 import me.rakshakhegde.pizza.network_dao.Variation
+import me.rakshakhegde.pizza.network_dao.hashCodeId
 import me.tatarka.bindingcollectionadapter2.BindingListViewAdapter
 import me.tatarka.bindingcollectionadapter2.ItemBinding
+import me.tatarka.bindingcollectionadapter2.OnItemBind
 import org.jetbrains.anko.act
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-	val pizzaListItemBinding = ItemBinding.of<VariantGroup>(BR.variantGroup, R.layout.pizza_variant_row)
-			.bindExtra(BR.V, this@MainActivity)
+	val pizzaListItemBinding = OnItemBind<VariantGroup> { itemBinding, position, item ->
+		itemBinding.set(BR.variantGroup, R.layout.pizza_variant_row)
+				.bindExtra(BR.V, this@MainActivity)
+				.bindExtra(BR.position, position)
+	}
 
 	val spinnerVariantItemBinding = ItemBinding.of<Variation>(BR.variation, R.layout.variation_spinner_dropdown_item)
 	val spinnerItemIds = BindingListViewAdapter.ItemIds<Variation> { position, variation ->
-		variation.name.hashCode().toLong()
+		variation.hashCodeId
 	}
 
 	@Inject
