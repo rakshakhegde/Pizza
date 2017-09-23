@@ -1,7 +1,5 @@
 package me.rakshakhegde.pizza
 
-import android.content.Context
-import android.support.multidex.MultiDex
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
@@ -16,11 +14,6 @@ class App : DaggerApplication() {
 	override fun applicationInjector(): AndroidInjector<App> = DaggerAppComponent
 			.builder()
 			.create(this@App)
-
-	override fun attachBaseContext(base: Context) {
-		super.attachBaseContext(base)
-		MultiDex.install(base)
-	}
 
 	override fun onCreate() {
 		super.onCreate()
