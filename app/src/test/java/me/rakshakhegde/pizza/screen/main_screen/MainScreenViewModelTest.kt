@@ -20,7 +20,7 @@ import org.junit.Test
 class MainScreenViewModelTest {
 
 	val testJson = """
-		{"variants":{"variant_groups":[{"group_id":"1","name":"Crust","variations":[{"name":"Thin","price":0,"default":1,"id":"1","inStock":1},{"name":"Thick","price":0,"default":0,"id":"2","inStock":1,"isVeg":1},{"name":"Cheese burst","price":100,"default":0,"id":"3","inStock":1,"isVeg":1}]},{"group_id":"2","name":"Size","variations":[{"name":"Small","price":0,"default":1,"id":"10","inStock":1,"isVeg":0},{"name":"Medium","price":100,"default":0,"id":"11","inStock":1,"isVeg":1},{"name":"Large","price":200,"default":0,"id":"12","inStock":1,"isVeg":0}]},{"group_id":"3","name":"Sauce","variations":[{"name":"Manchurian","price":20,"default":0,"id":"20","inStock":1,"isVeg":0},{"name":"Tomato","price":20,"default":0,"id":"21","inStock":1,"isVeg":1},{"name":"Mustard","price":20,"default":0,"id":"22","inStock":1,"isVeg":0}]}],"exclude_list":[[{"group_id":"1","variation_id":"3"},{"group_id":"2","variation_id":"10"}],[{"group_id":"2","variation_id":"10"},{"group_id":"3","variation_id":"20"}],[{"group_id":"1","variation_id":"2"},{"group_id":"2","variation_id":"11"},{"group_id":"3","variation_id":"21"}]]}}
+		{"variants":{"variant_groups":[{"group_id":"1","name":"Crust","variations":[{"name":"Thin","price":0,"default":1,"id":"1","inStock":1},{"name":"Thick","price":0,"default":0,"id":"2","inStock":1,"isVeg":1},{"name":"Cheese burst","price":100,"default":0,"id":"3","inStock":1,"isVeg":1},{"name":"Crazy Extra","price":1001,"default":0,"id":"4","inStock":1}]},{"group_id":"2","name":"Size","variations":[{"name":"Small","price":0,"default":1,"id":"10","inStock":1,"isVeg":0},{"name":"Medium","price":100,"default":0,"id":"11","inStock":1,"isVeg":1},{"name":"Large","price":200,"default":0,"id":"12","inStock":1,"isVeg":0}]},{"group_id":"3","name":"Sauce","variations":[{"name":"Manchurian","price":20,"default":0,"id":"20","inStock":1,"isVeg":0},{"name":"Tomato","price":20,"default":0,"id":"21","inStock":1,"isVeg":1},{"name":"Mustard","price":20,"default":0,"id":"22","inStock":1,"isVeg":0}]}],"exclude_list":[[{"group_id":"1","variation_id":"3"},{"group_id":"2","variation_id":"10"}],[{"group_id":"2","variation_id":"10"},{"group_id":"3","variation_id":"20"}],[{"group_id":"1","variation_id":"2"},{"group_id":"2","variation_id":"11"},{"group_id":"3","variation_id":"21"}],[{"group_id":"1","variation_id":"4"},{"group_id":"2","variation_id":"10"}],[{"group_id":"1","variation_id":"4"},{"group_id":"2","variation_id":"11"}],[{"group_id":"1","variation_id":"4"},{"group_id":"2","variation_id":"12"}]]}}
 		"""
 
 	val pizzaVariants = Moshi.Builder().build().adapter(PizzaVariants::class.java).fromJson(testJson)
@@ -71,6 +71,11 @@ class MainScreenViewModelTest {
 		val variationsOfGroup1 = variantGroups[1].variations
 		VM.filteredVariationsMap[1] shouldBe listOf(variationsOfGroup1[0], variationsOfGroup1[2])
 		VM.filteredVariationsMap[2] shouldBe listOf(variationsOfGroup2[2])
+
+		VM.selectedPositions[0] = 3
+
+		assert(VM.filteredVariationsMap[1]!!.isEmpty())
+		VM.filteredVariationsMap[2] shouldBe variationsOfGroup2
 	}
 
 	@Test

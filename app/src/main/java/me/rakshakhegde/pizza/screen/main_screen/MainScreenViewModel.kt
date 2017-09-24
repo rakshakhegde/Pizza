@@ -74,14 +74,18 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 	fun variantsChosen(): String? =
 			(0 until selectedPositions.size).map {
 				filteredVariationsMap[it] ?: return null
-			}.zip(selectedPositions).joinToString { (variations, position) ->
+			}
+					.filter { it.isNotEmpty() }
+					.zip(selectedPositions).joinToString { (variations, position) ->
 				variations[position].name
 			}
 
 	fun chosenVariantsTotalPrice(): String? =
 			"₹ " + (0 until selectedPositions.size).map {
 				filteredVariationsMap[it] ?: return null
-			}.zip(selectedPositions).sumBy { (variations, position) ->
+			}
+					.filter { it.isNotEmpty() }
+					.zip(selectedPositions).sumBy { (variations, position) ->
 				variations[position].price
 			}
 
@@ -111,6 +115,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 					}
 				}
 			}
+			// Checking if not zero to avoid List notifyChange()
 			if (removedAny && selectedPositions[position] != 0)
 				selectedPositions[position] = 0
 		}
