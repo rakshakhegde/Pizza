@@ -54,7 +54,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 				if (selectedPositions.isEmpty())
 					return
 
-				(positionStart until selectedPositions.size).forEach {
+				(positionStart + 1 until selectedPositions.size).forEach {
 					filterVariations(it)
 				}
 
@@ -64,7 +64,12 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 		})
 		pizzaVariants.onPropertyChanged {
 			filteredVariationsList.clear()
-			filteredVariationsList.addAll(Array<List<Variation>?>(get().variants.variant_groups.size) { null })
+			filteredVariationsList.addAll(Array<List<Variation>?>(get().variants.variant_groups.size) {
+				if (it == 0)
+					get().variants.variant_groups[0].variations
+				else
+					null
+			})
 
 			selectedPositions.clear()
 			selectedPositions.addAll(Array(get().variants.variant_groups.size) { 0 })
