@@ -52,7 +52,13 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 			}
 
 			override fun onItemRangeChanged(sender: ObservableArrayList<Int>, positionStart: Int, itemCount: Int) {
-				(positionStart until selectedPositions.size).forEach(this@MainScreenViewModel::filterVariations)
+				if (selectedPositions.isEmpty())
+					return
+
+				(positionStart until selectedPositions.size).forEach {
+					filterVariations(it)
+				}
+
 				variantsChosenText.set(variantsChosen())
 				variantsTotalPrice.set(chosenVariantsTotalPrice())
 			}
@@ -85,11 +91,12 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 		val currentVariations = ArrayList(variantGroup.variations) // to create a copy
 
 		if (position > 0) {
+			var removedAny = false
 			val filteredListOfExcludeLists = pizzaVariants.exclude_list.filter {
 				it.any { it.group_id == variantGroup.group_id }
 			}
 			filteredListOfExcludeLists.forEach { listOfExcludeLists ->
-				val variationIdOfThisGroup = listOfExcludeLists.first {
+				val variationIdOfCurrentGroup = listOfExcludeLists.first {
 					it.group_id == variantGroup.group_id
 				}.variation_id
 				listOfExcludeLists.forEach { (groupId, variationId) ->
@@ -100,10 +107,12 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 					if (indexOfGroup < position &&
 							filteredVariationsMap[indexOfGroup]!!.indexOfFirst { it.id == variationId } ==
 									selectedPositions[indexOfGroup]) {
-						currentVariations.removeAll { it.id == variationIdOfThisGroup }
+						removedAny = removedAny or currentVariations.removeAll { it.id == variationIdOfCurrentGroup }
 					}
 				}
 			}
+			if (removedAny && selectedPositions[position] != 0)
+				selectedPositions[position] = 0
 		}
 
 		filteredVariationsMap.put(position, currentVariations)

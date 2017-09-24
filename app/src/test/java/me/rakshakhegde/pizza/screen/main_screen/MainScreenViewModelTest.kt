@@ -67,11 +67,10 @@ class MainScreenViewModelTest {
 		VM.filteredVariationsMap[2] shouldBe listOf(variationsOfGroup2[1], variationsOfGroup2[2])
 
 		VM.selectedPositions[0] = 1
-		VM.selectedPositions[1] = 1
 
 		val variationsOfGroup1 = variantGroups[1].variations
 		VM.filteredVariationsMap[1] shouldBe listOf(variationsOfGroup1[0], variationsOfGroup1[2])
-		VM.filteredVariationsMap[2] shouldBe listOf(variationsOfGroup2[0], variationsOfGroup2[2])
+		VM.filteredVariationsMap[2] shouldBe listOf(variationsOfGroup2[2])
 	}
 
 	@Test
@@ -83,6 +82,12 @@ class MainScreenViewModelTest {
 
 		VM.variantsChosenText.get() shouldBe "Thin, Small, Tomato"
 		VM.variantsTotalPrice.get() shouldBe "₹ 20"
+
+		VM.selectedPositions[1] = 2
+		VM.selectedPositions[0] = 2
+
+		VM.variantsChosenText.get() shouldBe "Cheese burst, Medium, Manchurian"
+		VM.variantsTotalPrice.get() shouldBe "₹ 220"
 	}
 
 }
