@@ -1,7 +1,6 @@
 package me.rakshakhegde.pizza.screen.main_screen
 
 import android.databinding.ObservableArrayList
-import android.databinding.ObservableArrayMap
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import io.reactivex.ObservableEmitter
@@ -25,7 +24,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 
 	val selectedPositions = ObservableArrayList<Int>()
 
-	val filteredVariationsMap = ObservableArrayMap<Int, List<Variation>>()
+	val filteredVariationsList = ObservableArrayList<List<Variation>>()
 
 	val pizzaVariants = pizzaApi.getPizzaVariants()
 			.subscribeOn(Schedulers.io())
@@ -64,7 +63,8 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 			}
 		})
 		pizzaVariants.onPropertyChanged {
-			filteredVariationsMap.clear()
+			filteredVariationsList.clear()
+			filteredVariationsList.addAll(Array<List<Variation>?>(get().variants.variant_groups.size) { null })
 
 			selectedPositions.clear()
 			selectedPositions.addAll(Array(get().variants.variant_groups.size) { 0 })
@@ -73,7 +73,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 
 	fun variantsChosen(): String? =
 			(0 until selectedPositions.size).map {
-				filteredVariationsMap[it] ?: return null
+				filteredVariationsList[it] ?: return null
 			}
 					.filter { it.isNotEmpty() }
 					.zip(selectedPositions).joinToString { (variations, position) ->
@@ -82,7 +82,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 
 	fun chosenVariantsTotalPrice(): String? =
 			"₹ " + (0 until selectedPositions.size).map {
-				filteredVariationsMap[it] ?: return null
+				filteredVariationsList[it] ?: return null
 			}
 					.filter { it.isNotEmpty() }
 					.zip(selectedPositions).sumBy { (variations, position) ->
@@ -109,7 +109,7 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 						it.group_id == groupId
 					}
 					if (indexOfGroup < position &&
-							filteredVariationsMap[indexOfGroup]!!.indexOfFirst { it.id == variationId } ==
+							filteredVariationsList[indexOfGroup]!!.indexOfFirst { it.id == variationId } ==
 									selectedPositions[indexOfGroup]) {
 						removedAny = removedAny or currentVariations.removeAll { it.id == variationIdOfCurrentGroup }
 					}
@@ -120,6 +120,6 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 				selectedPositions[position] = 0
 		}
 
-		filteredVariationsMap.put(position, currentVariations)
+		filteredVariationsList[position] = currentVariations
 	}
 }

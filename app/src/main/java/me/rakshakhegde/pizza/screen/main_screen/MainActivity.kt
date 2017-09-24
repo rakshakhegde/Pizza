@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-	val pizzaListItemBinding = OnItemBind<VariantGroup> { itemBinding, position, item ->
+	val pizzaListItemBinding = OnItemBind<VariantGroup> { itemBinding, position, variantGroup ->
 		itemBinding.set(BR.variantGroup, R.layout.pizza_variant_row)
 				.bindExtra(BR.V, this@MainActivity)
 				.bindExtra(BR.position, position)
