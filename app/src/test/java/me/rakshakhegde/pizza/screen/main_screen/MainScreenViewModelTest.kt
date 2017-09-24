@@ -8,6 +8,7 @@ import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import me.rakshakhegde.observableflow.observableListOf
 import me.rakshakhegde.observableflow.onPropertyChanged
 import me.rakshakhegde.pizza.network_dao.PizzaApi
 import me.rakshakhegde.pizza.network_dao.PizzaVariants
@@ -67,10 +68,41 @@ class MainScreenViewModelTest {
 
 		VM.pizzaVariants.onPropertyChanged {}
 
-		val filteredVariations = VM.filterVariations(2, listOf(2, 0, Random().nextInt()))
+		val random = Random()
+		val variantGroups = pizzaVariants.variants.variant_groups
 
-		val allVariations = pizzaVariants.variants.variant_groups[2].variations
-		filteredVariations shouldBe listOf(allVariations[0], allVariations[1])
+		val filteredVariations0 = VM.filterVariations(0, observableListOf(random.nextInt(), random.nextInt(), random.nextInt()))
+		filteredVariations0 shouldBe variantGroups[0].variations
+
+		val filteredVariations1 = VM.filterVariations(1, observableListOf(1, random.nextInt(), random.nextInt()))
+		filteredVariations1 shouldBe variantGroups[1].variations
+
+		val filteredVariations2 = VM.filterVariations(2, observableListOf(1, 0, random.nextInt()))
+		val allVariations2 = variantGroups[2].variations
+		filteredVariations2 shouldBe listOf(allVariations2[0], allVariations2[1])
+	}
+
+	@Test
+	fun verify_variants_chosen_text_formed_correctly() {
+		val pizzaApi: PizzaApi = mock {
+			on { getPizzaVariants() } doReturn Single.just(pizzaVariants)
+		}
+		val VM = MainScreenViewModel(pizzaApi)
+
+		VM.pizzaVariants.onPropertyChanged {}
+
+		val random = Random()
+		val variantGroups = pizzaVariants.variants.variant_groups
+
+		val filteredVariations0 = VM.filterVariations(0, observableListOf(random.nextInt(), random.nextInt(), random.nextInt()))
+		filteredVariations0 shouldBe variantGroups[0].variations
+
+		val filteredVariations1 = VM.filterVariations(1, observableListOf(1, random.nextInt(), random.nextInt()))
+		filteredVariations1 shouldBe variantGroups[1].variations
+
+		val filteredVariations2 = VM.filterVariations(2, observableListOf(1, 0, random.nextInt()))
+		val allVariations2 = variantGroups[2].variations
+		filteredVariations2 shouldBe listOf(allVariations2[0], allVariations2[1])
 	}
 
 }

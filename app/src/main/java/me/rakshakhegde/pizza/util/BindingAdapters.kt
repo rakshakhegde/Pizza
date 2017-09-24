@@ -15,7 +15,3 @@ fun View.visible(isVisible: Boolean) {
 fun View.invisible(isInvisible: Boolean) {
 	visibility = if (isInvisible) View.INVISIBLE else View.VISIBLE
 }
-
-@BindingAdapter("execute")
-fun View.execute(f: Any?) {
-}

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.animation.AnimationUtils
 import dagger.android.AndroidInjection
+import me.rakshakhegde.observableflow.onListChanged
 import me.rakshakhegde.pizza.BR
 import me.rakshakhegde.pizza.R
 import me.rakshakhegde.pizza.databinding.ActivityMainBinding
@@ -50,15 +51,14 @@ class MainActivity : AppCompatActivity() {
 		binding.retryButton.setOnClickListener {
 			VM.retryClick!!.onNext(0)
 		}
+
+		VM.selectedPositions.onListChanged {
+			binding.addItemBar.startAnimation(bounceAnim)
+		}
 	}
 
 	override fun onDestroy() {
 		binding.unbind()
 		super.onDestroy()
-	}
-
-	fun bounceAddItemBar(vararg objs: Any?): Int {
-		binding.addItemBar.startAnimation(bounceAnim)
-		return 0
 	}
 }
