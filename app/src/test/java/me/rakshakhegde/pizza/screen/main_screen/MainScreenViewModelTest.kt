@@ -71,11 +71,6 @@ class MainScreenViewModelTest {
 		val variationsOfGroup1 = variantGroups[1].variations
 		VM.filteredVariationsList[1] shouldBe listOf(variationsOfGroup1[0], variationsOfGroup1[2])
 		VM.filteredVariationsList[2] shouldBe listOf(variationsOfGroup2[2])
-
-		VM.selectedPositions[0] = 3
-
-		assert(VM.filteredVariationsList[1]!!.isEmpty())
-		VM.filteredVariationsList[2] shouldBe variationsOfGroup2
 	}
 
 	@Test
