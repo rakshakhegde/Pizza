@@ -1,10 +1,13 @@
 package me.rakshakhegde.pizza.screen.main_screen
 
 import android.databinding.ObservableArrayList
+import android.databinding.ObservableArrayMap
 import android.databinding.ObservableBoolean
-import android.support.v4.util.SparseArrayCompat
+import android.databinding.ObservableField
 import io.reactivex.ObservableEmitter
 import io.reactivex.schedulers.Schedulers
+import me.rakshakhegde.observableflow.SimpleOnObservableListChangedCallback
+import me.rakshakhegde.observableflow.onPropertyChanged
 import me.rakshakhegde.pizza.network_dao.PizzaApi
 import me.rakshakhegde.pizza.network_dao.Variation
 import me.rakshakhegde.rxdatabinding.toField
@@ -22,20 +25,13 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 
 	val selectedPositions = ObservableArrayList<Int>()
 
-	val filteredVariationsMap = SparseArrayCompat<List<Variation>>()
+	val filteredVariationsMap = ObservableArrayMap<Int, List<Variation>>()
 
 	val pizzaVariants = pizzaApi.getPizzaVariants()
 			.subscribeOn(Schedulers.io())
 			.doOnSubscribe {
 				pizzaVariantsLoading.set(true)
 				pizzaVariantsError.set(false)
-			}
-			.doOnSuccess { pizzaVariants ->
-				val variantGroupsSize = pizzaVariants.variants.variant_groups.size
-				selectedPositions.clear()
-				selectedPositions.addAll(Array(variantGroupsSize) { 0 })
-
-				filteredVariationsMap.clear()
 			}
 			.doFinally { pizzaVariantsLoading.set(false) }
 			.doOnError {
@@ -45,46 +41,71 @@ class MainScreenViewModel @Inject constructor(pizzaApi: PizzaApi) {
 			.toObservable()
 			.toField()
 
-	fun variantsChosen(selectedPositions: List<Int>): String? =
+	val variantsChosenText = ObservableField<String>()
+	val variantsTotalPrice = ObservableField<String>()
+
+	init {
+		selectedPositions.addOnListChangedCallback(object : SimpleOnObservableListChangedCallback<Int, ObservableArrayList<Int>>() {
+
+			override fun onItemRangeInserted(sender: ObservableArrayList<Int>, positionStart: Int, itemCount: Int) {
+				onItemRangeChanged(sender, positionStart, itemCount)
+			}
+
+			override fun onItemRangeChanged(sender: ObservableArrayList<Int>, positionStart: Int, itemCount: Int) {
+				(positionStart until selectedPositions.size).forEach(this@MainScreenViewModel::filterVariations)
+				variantsChosenText.set(variantsChosen())
+				variantsTotalPrice.set(chosenVariantsTotalPrice())
+			}
+		})
+		pizzaVariants.onPropertyChanged {
+			filteredVariationsMap.clear()
+
+			selectedPositions.clear()
+			selectedPositions.addAll(Array(get().variants.variant_groups.size) { 0 })
+		}
+	}
+
+	fun variantsChosen(): String? =
 			(0 until selectedPositions.size).map {
 				filteredVariationsMap[it] ?: return null
 			}.zip(selectedPositions).joinToString { (variations, position) ->
 				variations[position].name
 			}
 
-	fun chosenVariantsTotalPrice(selectedPositions: List<Int>): String? =
+	fun chosenVariantsTotalPrice(): String? =
 			"₹ " + (0 until selectedPositions.size).map {
 				filteredVariationsMap[it] ?: return null
 			}.zip(selectedPositions).sumBy { (variations, position) ->
 				variations[position].price
 			}
 
-	fun filterVariations(position: Int, selectedIndices: ObservableArrayList<Int>): List<Variation> {
+	fun filterVariations(position: Int) {
 		val pizzaVariants = pizzaVariants.get().variants
 		val variantGroup = pizzaVariants.variant_groups[position]
 		val currentVariations = ArrayList(variantGroup.variations) // to create a copy
 
-		if (position == 0) {
-			filteredVariationsMap.put(0, currentVariations)
-			return currentVariations
-		}
-
-		val allExcludeListForThisGroup = pizzaVariants.exclude_list.filter { excludeList ->
-			excludeList[1].group_id == variantGroup.group_id
-		}
-		allExcludeListForThisGroup.forEach { excludeList ->
-			val indexOfGroup = pizzaVariants.variant_groups.indexOfFirst {
-				it.group_id == excludeList[0].group_id
+		if (position > 0) {
+			val filteredListOfExcludeLists = pizzaVariants.exclude_list.filter {
+				it.any { it.group_id == variantGroup.group_id }
 			}
-			val variations = filteredVariationsMap[indexOfGroup]
-			val selectedIndex = selectedIndices[indexOfGroup]
+			filteredListOfExcludeLists.forEach { listOfExcludeLists ->
+				val variationIdOfThisGroup = listOfExcludeLists.first {
+					it.group_id == variantGroup.group_id
+				}.variation_id
+				listOfExcludeLists.forEach { (groupId, variationId) ->
 
-			if (variations[selectedIndex].id == excludeList[0].variation_id) {
-				currentVariations.removeAll { it.id == excludeList[1].variation_id }
+					val indexOfGroup = pizzaVariants.variant_groups.indexOfFirst {
+						it.group_id == groupId
+					}
+					if (indexOfGroup < position &&
+							filteredVariationsMap[indexOfGroup]!!.indexOfFirst { it.id == variationId } ==
+									selectedPositions[indexOfGroup]) {
+						currentVariations.removeAll { it.id == variationIdOfThisGroup }
+					}
+				}
 			}
 		}
 
 		filteredVariationsMap.put(position, currentVariations)
-		return currentVariations
 	}
 }

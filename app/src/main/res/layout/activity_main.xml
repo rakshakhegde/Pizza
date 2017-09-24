@@ -73,7 +73,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="start"
-				android:text="@{V.VM.chosenVariantsTotalPrice(V.VM.selectedPositions)}"
+				android:text="@{V.VM.variantsTotalPrice}"
 				android:textStyle="bold"
 				tools:text="₹ 450"/>
 
@@ -92,7 +92,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="16dp"
 			android:layout_marginLeft="16dp"
-			android:text="@{V.VM.variantsChosen(V.VM.selectedPositions)}"
+			android:text="@{V.VM.variantsChosenText}"
 			app:layout_constraintBottom_toTopOf="@+id/addItemBar"
 			app:layout_constraintStart_toStartOf="parent"
 			tools:text="Thin, Medium, Tomato"/>

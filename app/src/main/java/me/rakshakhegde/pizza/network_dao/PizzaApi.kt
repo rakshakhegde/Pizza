@@ -8,6 +8,6 @@ import retrofit2.http.GET
  */
 interface PizzaApi {
 
-	@GET("bins/s58o1")
+	@GET("bins/1154e1")
 	fun getPizzaVariants(): Single<PizzaVariants>
 }
