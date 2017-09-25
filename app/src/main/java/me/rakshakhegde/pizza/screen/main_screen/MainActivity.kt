@@ -39,6 +39,12 @@ class MainActivity : AppCompatActivity() {
 		AnimationUtils.loadAnimation(applicationContext, R.anim.notify_bounce)
 	}
 
+	val selectedPositionsChangedCallback by lazy {
+		VM.selectedPositions.onListChanged {
+			binding.addItemBar.startAnimation(bounceAnim)
+		}
+	}
+
 	@Inject
 	lateinit var VM: MainScreenViewModel
 
@@ -52,13 +58,12 @@ class MainActivity : AppCompatActivity() {
 			VM.retryClick!!.onNext(0)
 		}
 
-		VM.selectedPositions.onListChanged {
-			binding.addItemBar.startAnimation(bounceAnim)
-		}
+		selectedPositionsChangedCallback
 	}
 
 	override fun onDestroy() {
 		binding.unbind()
+		VM.selectedPositions.removeOnListChangedCallback(selectedPositionsChangedCallback)
 		super.onDestroy()
 	}
 }
