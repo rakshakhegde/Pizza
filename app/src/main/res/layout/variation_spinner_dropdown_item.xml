@@ -28,7 +28,7 @@
 			tools:text="Thin"/>
 
 		<TextView
-			visibility="@{variation.inStock == 0}"
+			visible="@{variation.inStock == 0}"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="8dp"
