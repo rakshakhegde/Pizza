@@ -28,6 +28,13 @@
 			tools:text="Thin"/>
 
 		<TextView
+			visibility="@{variation.inStock == 0}"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="8dp"
+			android:text="Not in stock"/>
+
+		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:padding="12dp"
